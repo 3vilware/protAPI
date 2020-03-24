@@ -87,7 +87,10 @@ class RunJob(views.APIView):
 
         return Response(data)
 
-
+    def get(self, request):
+        todo = Job.objects.filter(user=request.user).order_by('-date')
+        serializer = JobSerilizer(todo, many=True)
+        return Response(serializer.data)
 
 """
 START serillizers

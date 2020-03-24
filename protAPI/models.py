@@ -28,7 +28,7 @@ class StatusJob(models.Model):
     active = models.BooleanField(default=True)
 
 class Job(models.Model):
-    user = models.ForeignKey(User, related_name='jobs', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     duration = models.FloatField(null=True)
     description = models.CharField(max_length=200, null=True)
