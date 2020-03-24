@@ -17,7 +17,7 @@ import time
 from protAPI.proteinnet.pnerf import pnerf as pnerf
 from protMaster import settings
 
-base_dir = settings.BASE_DIR + "/protAPI/proteinnet/"
+base_dir = settings.BASE_DIR + "/media"
 
 AA_ID_DICT = {'A': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5, 'G': 6, 'H': 7, 'I': 8, 'K': 9,
               'L': 10, 'M': 11, 'N': 12, 'P': 13, 'Q': 14, 'R': 15, 'S': 16, 'T': 17,
@@ -217,7 +217,7 @@ def get_structure_from_angles(aa_list_encoded, angles):
 def write_to_pdb(structure, prot_id):
     out = Bio.PDB.PDBIO()
     out.set_structure(structure)
-    out.save(base_dir+"output/protein_" + str(prot_id) + ".pdb")
+    out.save(base_dir+"/protein_" + str(prot_id) + ".pdb")
 
 def calc_pairwise_distances(chain_a, chain_b, use_gpu):
     distance_matrix = torch.Tensor(chain_a.size()[0], chain_b.size()[0]).type(torch.float)
