@@ -8,6 +8,7 @@ class ModelTrained(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=250)
     file = models.FileField(null=True)
+    public = models.BooleanField(default=False)
 
 class StatusTraining(models.Model):
     description = models.CharField(max_length=250)

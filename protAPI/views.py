@@ -13,6 +13,9 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from protMaster import settings
 from django.core.files import File
+from django.db.models import Q
+
+
 
 def index(request):
     predict.init()
@@ -70,13 +73,24 @@ class TestEndpoint(views.APIView):
 class RunJob(views.APIView):
     permission_classes = (IsAuthenticated,)
 
-    # base_dir = settings.BASE_DIR + "/protAPI/proteinnet/"
     def post(self, request):
         aa_chain = request.data['chain']
+        try:
+            model = request.data['model']
+        except:
+            model = ""
 
-        job = Job(user=request.user)
+        try:
+            model = ModelTrained.objects.get(Q(author=request.user) | Q(public=True), pk=model)
+        except:
+            model = ""
+        if model:
+            job = Job(user=request.user, model=model)
+        else:
+            job = Job(user=request.user)
+
         job.save()
-        pdb_name = predict.run_job(aa_chain, job_id=job.pk)
+        pdb_name = predict.run_job(aa_chain, job_id=job.pk, model=model)
         job.pdb = pdb_name
         job.save()
 
@@ -92,6 +106,9 @@ class RunJob(views.APIView):
         serializer = JobSerilizer(todo, many=True)
         return Response(serializer.data)
 
+
+
+
 """
 START serillizers
 """
@@ -100,7 +117,7 @@ class ProtUserSerilizer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['name', 'jobs', 'id']
+        fields = ['id']
         read_only_fields = ['jobs']
 
 
@@ -108,6 +125,13 @@ class JobSerilizer(serializers.ModelSerializer):
     class Meta:
         model = Job
         fields = '__all__'
+
+class ModelTrainedSerilizer(serializers.ModelSerializer):
+    class Meta:
+        model = ModelTrained
+        fields = '__all__'
+        read_only_fields = ['author']
+
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -137,6 +161,48 @@ class UserSerializer(serializers.ModelSerializer):
 """
 END Serilizers
 """
+
+
+
+
+class ModeltrainedViewSet(generics.ListCreateAPIView): # Create and read models for a user
+    permission_classes = (IsAuthenticated,)
+    queryset = ModelTrained.objects.all()
+    serializer_class = ModelTrainedSerilizer
+
+    def list(self, request):
+        queryset = ModelTrained.objects.filter(author=request.user)
+        serializer = ModelTrainedSerilizer(queryset, many=True)
+
+        return Response(serializer.data)
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
+
+class ModelTrainedChange(views.APIView):
+
+    def delete(self, request, pk, format=None):
+        model = ModelTrained.objects.get(pk=pk)
+        model.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def put(self, request, pk, format=None):
+        model = ModelTrained.objects.get(pk=pk)
+        serializer = ModelTrainedSerilizer(model, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request, pk):
+        todo = ModelTrained.objects.filter(public=True)
+        serializer = ModelTrainedSerilizer(todo, many=True)
+        return Response(serializer.data)
+
+
+
+
 
 class UserViewSetAll(generics.ListCreateAPIView):
     queryset = User.objects.all()
@@ -169,7 +235,7 @@ class UserViewSet(views.APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def put(self, request, pk, format=None):
-        print(request.data.get('name'))
+        # print(request.data.get('name'))
         product = User.objects.get(pk=pk)
         serializer = ProtUserSerilizer(product, data=request.data)
         if serializer.is_valid():

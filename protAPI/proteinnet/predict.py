@@ -29,7 +29,13 @@ def init():
 
 def run_job(aa_chain, model="", job_id=""):
     input_sequences = [aa_chain]
-    model_path = settings.BASE_DIR + "/protAPI/proteinnet/output/models/2020-02-27_05_47_39-TRAIN-LR0_01-MB5.model"
+    if model == "":
+        model =  "2020-02-27_05_47_39-TRAIN-LR0_01-MB5.model"
+    else:
+        model = str(model.file)
+
+    model_path = settings.BASE_DIR + settings.MEDIA_URL + model
+    print(model_path)
 
 
     model = torch.load(model_path)
