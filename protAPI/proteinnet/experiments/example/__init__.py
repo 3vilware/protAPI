@@ -4,9 +4,15 @@
 #
 # For license information, please see the LICENSE file in the root directory.
 
-from preprocessing import process_raw_data
-from models import *
-from training import train_model
+try:
+    from protAPI.proteinnet.preprocessing import *
+    from protAPI.proteinnet.models import *
+    from protAPI.proteinnet.training import train_model
+except:
+    from preprocessing import *
+    from models import *
+    from training import train_model
+
 
 
 def run_experiment(parser, use_gpu):

@@ -14,8 +14,9 @@ from rest_framework.permissions import IsAuthenticated
 from protMaster import settings
 from django.core.files import File
 from django.db.models import Q
-
-
+import requests
+from protAPI import cloud_storage
+import os
 
 def index(request):
     predict.init()
@@ -75,6 +76,7 @@ class RunJob(views.APIView):
 
     def post(self, request):
         aa_chain = request.data['chain']
+        print("VAL", aa_chain)
         try:
             model = request.data['model']
         except:
@@ -188,8 +190,10 @@ class ModelTrainedChange(views.APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def put(self, request, pk, format=None):
+
         model = ModelTrained.objects.get(pk=pk)
         serializer = ModelTrainedSerilizer(model, data=request.data)
+        print(serializer)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -208,12 +212,15 @@ class UserViewSetAll(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = ProtUserSerilizer
 
+
+
 class JobViewSetAll(generics.ListCreateAPIView):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
 
     queryset = Job.objects.all()
     serializer_class = JobSerilizer
+
 
 class UserViewSet(views.APIView):
 
@@ -245,11 +252,60 @@ class UserViewSet(views.APIView):
 
 
 
+class ProteinData(views.APIView):
+
+    def get(self, request, protein_id):
+        structure = get_pdb(protein_id)
+        path = settings.MEDIA_ROOT + "/" + protein_id+".pdb"
+        f = open(path, "w")
+        f.write(structure)
+        f.close()
+
+        fasta = get_fasta(protein_id)
+
+        data = {
+            "response":"success",
+            "pdb": protein_id+".pdb",
+            "fasta": fasta,
+        }
+        return Response(data)
 
 
 
 def viewProt(request, name):
     print(name)
+    try:
+        with open("media/" + name) as f:
+            f.read()
+            f.close()
+    except IOError:
+        print("No file in local server")
+        cloud_storage.download_file(os.path.join(settings.MEDIA_ROOT, name), name)
 
     context = {"name":name}
     return render(request, 'view_prot.html', context)
+
+
+
+def get_pdb(pdb_id):
+    result = requests.get(
+            'https://files.rcsb.org/view/{}.pdb'.format(pdb_id))
+
+    #print(result.text)
+    return result.text
+
+
+def get_fasta(pdb_id):
+    begin = False
+    full_sequence = ""
+    result = requests.get(
+            'https://www.rcsb.org/fasta/entry/{}/display'.format(pdb_id))
+    for line in str(result.text).splitlines():
+        if line.startswith('>') and not begin:
+            begin = True
+        elif line.startswith('>') and begin:
+            break
+        else:
+            full_sequence = full_sequence + line
+    #print(list(full_sequence)) # tolist
+    return full_sequence

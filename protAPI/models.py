@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
+from protAPI import cloud_storage
+from django.db.models.signals import post_save, post_delete
+
 # Create your models here.
 
 
@@ -9,6 +12,19 @@ class ModelTrained(models.Model):
     description = models.CharField(max_length=250)
     file = models.FileField(null=True)
     public = models.BooleanField(default=False)
+
+def upload_model(sender, **kwargs):
+    instance = kwargs['instance']
+    file_path = "media/" + str(instance.file)
+    to_storage = cloud_storage.upload_file(file_path, 'protein-public', str(instance.file))
+
+    if to_storage:
+        print("Uploaded to s3")
+    else:
+        print("Error uploading to s3")
+
+post_save.connect(upload_model, sender=ModelTrained)
+
 
 class StatusTraining(models.Model):
     description = models.CharField(max_length=250)
@@ -39,5 +55,26 @@ class Job(models.Model):
 
     def __str__(self):
         return '%d: %s' % (self.pk, self.description)
+
+def upload_pdb(sender, **kwargs):
+    instance = kwargs['instance']
+    file_path = "media/" + str(instance.pdb)
+    to_storage = cloud_storage.upload_file(file_path, 'protein-public', str(instance.pdb))
+
+    if to_storage:
+        print("Uploaded to s3")
+    else:
+        print("Error uploading to s3")
+
+post_save.connect(upload_pdb, sender=Job)
+
+
+
+
+
+
+
+
+
 
 

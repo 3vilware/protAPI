@@ -4,16 +4,25 @@
 #
 # For license information, please see the LICENSE file in the root directory.
 
+print("Running models...")
 import torch.autograd as autograd
 import torch.nn as nn
-from protAPI.proteinnet.util import *
-import torch.nn.utils.rnn as rnn_utils
-import time
-import numpy as np
-from protAPI.proteinnet import openprotein
-from protMaster import settings
 
-base_dir = settings.BASE_DIR + "/protAPI/proteinnet/"
+
+try:
+    from protAPI.proteinnet import openprotein
+    print("Prot OK")
+    from protMaster import settings
+    from protAPI.proteinnet.util import *
+    base_dir = settings.BASE_DIR + "/protAPI/proteinnet/"
+except Exception as e:
+    print("Inside except", e)
+    import openprotein
+    from util import *
+    import pathlib
+    # base_dir = settings.BASE_DIR + "/media"
+    base_dir = str(pathlib.Path().absolute()) + "/"
+
 
 # seed random generator for reproducibility
 torch.manual_seed(1)
@@ -136,3 +145,25 @@ class RrnModel(openprotein.BaseModel):
         return output, backbone_atoms_padded, batch_sizes
 
 
+
+ANGLE_ARR = torch.tensor([[-120, 140, -370], [0, 120, -150], [25, -120, 150]]).float()
+
+
+class MyModel(openprotein.BaseModel):
+    def __init__(self, embedding_size, use_gpu):
+        super(MyModel, self).__init__(use_gpu, embedding_size)
+        self.use_gpu = use_gpu
+        self.number_angles = 3
+        self.input_to_angles = nn.Linear(embedding_size, self.number_angles)
+
+    def _get_network_emissions(self, original_aa_string):
+        batch_sizes = list([a.size() for a in original_aa_string])
+
+        embedded_input = self.embed(original_aa_string)
+        emissions_padded = self.input_to_angles(embedded_input)
+
+        probabilities = torch.softmax(emissions_padded.transpose(0, 1), 2)
+
+        output_angles = torch.matmul(probabilities, ANGLE_ARR).transpose(0, 1)
+
+        return output_angles, [], batch_sizes

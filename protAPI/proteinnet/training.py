@@ -3,8 +3,10 @@
 # @author Jeppe Hallgren
 #
 # For license information, please see the LICENSE file in the root directory.
-
-from protAPI.proteinnet.util import *
+try:
+    from protAPI.proteinnet.util import *
+except:
+    from util import *
 import torch.optim as optim
 import requests
 import json
@@ -73,15 +75,15 @@ def train_model(data_set_identifier, model, train_loader, validation_loader, lea
                 sample_num.append(minibatches_proccesed)
                 train_loss_values.append(train_loss)
                 validation_loss_values.append(validation_loss)
-
-                if not hide_ui:
-                    json_data["validation_dataset_size"] = validation_dataset_size
-                    json_data["sample_num"] = sample_num
-                    json_data["train_loss_values"] = train_loss_values
-                    json_data["validation_loss_values"] = validation_loss_values
-                    res = requests.post('http://localhost:5000/graph', json=json_data)
-                    if res.ok:
-                        print(res.json())
+                #
+                # if not hide_ui:
+                #     json_data["validation_dataset_size"] = validation_dataset_size
+                #     json_data["sample_num"] = sample_num
+                #     json_data["train_loss_values"] = train_loss_values
+                #     json_data["validation_loss_values"] = validation_loss_values
+                #     res = requests.post('http://localhost:5000/graph', json=json_data)
+                #     if res.ok:
+                #         print(res.json())
 
                 if minibatches_proccesed > minimum_updates and minibatches_proccesed >= best_model_minibatch_time + minimum_updates:
                     stopping_condition_met = True

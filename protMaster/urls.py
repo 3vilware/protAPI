@@ -56,10 +56,11 @@ urlpatterns = [
     path('run_job', views.RunJob.as_view(), name="run_job"),
     path('models', views.ModeltrainedViewSet.as_view(), name="models"),
     path('models/<int:pk>', views.ModelTrainedChange.as_view(), name="models"), # delete/update
+    path('protein_data/<str:protein_id>', views.ProteinData.as_view(), name="protein_data"), # delete/update
 
     path('view_prot/<str:name>', views.viewProt, name="viewProt"),
 
-    path('login/', obtain_auth_token, name='api_token_auth'),
+    path('login', obtain_auth_token, name='api_token_auth'),
     path('register/', views.Register.as_view(), name='register'),
 
     path('swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
