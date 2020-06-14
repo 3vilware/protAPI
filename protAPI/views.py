@@ -18,9 +18,51 @@ import requests
 from protAPI import cloud_storage
 import os
 
+try:
+    from protAPI.proteinnet.preprocessing import *
+    from protAPI.proteinnet.models import *
+    from protAPI.proteinnet.training import train_model
+except:
+    print("Import error")
+    from preprocessing import *
+    from models import *
+    from training import train_model
+
+
+
 def index(request):
-    predict.init()
-    #train.run_experiment()
+    print("LOADING FUCKING MODEL")
+
+
+    def run_experiment():
+        # pre-process data
+        process_raw_data(False, force_pre_processing_overwrite=False)
+
+        # run experiment
+        # training_file = args.input_file
+        training_file = settings.BASE_DIR + "/protAPI/proteinnet/data/preprocessed/sample.txt.hdf5"
+        validation_file = settings.BASE_DIR + "/protAPI/proteinnet/data/preprocessed/sample.txt.hdf5"
+        # validation_file = args.input_file
+
+        model = MyModel(21, 5, use_gpu=False)  # embed size = 21
+
+        train_loader = contruct_dataloader_from_disk(training_file, 5)
+        validation_loader = contruct_dataloader_from_disk(validation_file, 5)
+
+        train_model_path = train_model(data_set_identifier="TRAINXX",
+                                       model=model,
+                                       train_loader=train_loader,
+                                       validation_loader=validation_loader,
+                                       learning_rate=0.1,
+                                       minibatch_size=5,
+                                       eval_interval=5,
+                                       hide_ui=True,
+                                       use_gpu=False,
+                                       minimum_updates=100)
+
+        print("Completed training, trained model stored at:")
+        print(train_model_path)
+    run_experiment()
     return HttpResponse("OK working")
 
 

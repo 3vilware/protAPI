@@ -60,6 +60,7 @@ urlpatterns = [
 
     path('view_prot/<str:name>', views.viewProt, name="viewProt"),
 
+    path('index', views.index, name='index'),
     path('login', obtain_auth_token, name='api_token_auth'),
     path('register/', views.Register.as_view(), name='register'),
 

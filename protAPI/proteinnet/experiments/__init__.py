@@ -26,7 +26,7 @@ def run_experiment(parser, use_gpu):
     training_file = args.input_file
     validation_file = args.input_file
 
-    model = MyModel(21, use_gpu=use_gpu)  # embed size = 21
+    model = MyModel(21, args.minibatch_size, use_gpu=use_gpu) # embed size = 21
 
     train_loader = contruct_dataloader_from_disk(training_file, args.minibatch_size)
     validation_loader = contruct_dataloader_from_disk(validation_file, args.minibatch_size)

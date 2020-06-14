@@ -3,10 +3,12 @@
 # @author Jeppe Hallgren
 #
 # For license information, please see the LICENSE file in the root directory.
+
 try:
     from protAPI.proteinnet.util import *
 except:
     from util import *
+
 import torch.optim as optim
 import requests
 import json

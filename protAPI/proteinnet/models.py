@@ -4,25 +4,21 @@
 #
 # For license information, please see the LICENSE file in the root directory.
 
-print("Running models...")
 import torch.autograd as autograd
 import torch.nn as nn
-
-
+import torch.nn.utils.rnn as rnn_utils
+import time
+import numpy as np
 try:
     from protAPI.proteinnet import openprotein
-    print("Prot OK")
     from protMaster import settings
     from protAPI.proteinnet.util import *
     base_dir = settings.BASE_DIR + "/protAPI/proteinnet/"
-except Exception as e:
-    print("Inside except", e)
+except:
     import openprotein
     from util import *
     import pathlib
-    # base_dir = settings.BASE_DIR + "/media"
     base_dir = str(pathlib.Path().absolute()) + "/"
-
 
 # seed random generator for reproducibility
 torch.manual_seed(1)
@@ -145,25 +141,49 @@ class RrnModel(openprotein.BaseModel):
         return output, backbone_atoms_padded, batch_sizes
 
 
-
-ANGLE_ARR = torch.tensor([[-120, 140, -370], [0, 120, -150], [25, -120, 150]]).float()
-
-
 class MyModel(openprotein.BaseModel):
-    def __init__(self, embedding_size, use_gpu):
+    def __init__(self, embedding_size, minibatch_size, use_gpu=False):
         super(MyModel, self).__init__(use_gpu, embedding_size)
-        self.use_gpu = use_gpu
-        self.number_angles = 3
-        self.input_to_angles = nn.Linear(embedding_size, self.number_angles)
+
+        self.hidden_size = 3
+        self.num_lstm_layers = 2
+        self.mixture_size = 500
+        self.bi_lstm = nn.LSTM(self.get_embedding_size(), self.hidden_size,
+                               num_layers=self.num_lstm_layers, bidirectional=True, bias=True)
+        self.hidden_to_labels = nn.Linear(self.hidden_size * 2, self.mixture_size, bias=True) # * 2 for bidirectional
+        self.init_hidden(minibatch_size)
+        self.softmax_to_angle = soft_to_angle(self.mixture_size)
+        self.soft = nn.LogSoftmax(2)
+        self.bn = nn.BatchNorm1d(self.mixture_size)
+
+    def init_hidden(self, minibatch_size):
+        # number of layers (* 2 since bidirectional), minibatch_size, hidden size
+        initial_hidden_state = torch.zeros(self.num_lstm_layers * 2, minibatch_size, self.hidden_size)
+        initial_cell_state = torch.zeros(self.num_lstm_layers * 2, minibatch_size, self.hidden_size)
+        if self.use_gpu:
+            initial_hidden_state = initial_hidden_state.cuda()
+            initial_cell_state = initial_cell_state.cuda()
+        self.hidden_layer = (autograd.Variable(initial_hidden_state),
+                             autograd.Variable(initial_cell_state))
 
     def _get_network_emissions(self, original_aa_string):
-        batch_sizes = list([a.size() for a in original_aa_string])
+        packed_input_sequences = self.embed(original_aa_string)
+        minibatch_size = int(packed_input_sequences[1][0])
+        self.init_hidden(minibatch_size)
+        (data, bi_lstm_batches, _, _), self.hidden_layer = self.bi_lstm(packed_input_sequences, self.hidden_layer)
+        emissions_padded, batch_sizes = torch.nn.utils.rnn.pad_packed_sequence(
+            torch.nn.utils.rnn.PackedSequence(self.hidden_to_labels(data), bi_lstm_batches))
+        x = emissions_padded.transpose(0,1).transpose(1,2) # minibatch_size, self.mixture_size, -1
+        x = self.bn(x)
+        x = x.transpose(1,2) #(minibatch_size, -1, self.mixture_size)
+        p = torch.exp(self.soft(x))
+        output_angles = self.softmax_to_angle(p).transpose(0,1) # max size, minibatch size, 3 (angels)
+        backbone_atoms_padded, batch_sizes_backbone = get_backbone_positions_from_angular_prediction(output_angles, batch_sizes, self.use_gpu)
+        return output_angles, backbone_atoms_padded, batch_sizes
 
-        embedded_input = self.embed(original_aa_string)
-        emissions_padded = self.input_to_angles(embedded_input)
 
-        probabilities = torch.softmax(emissions_padded.transpose(0, 1), 2)
 
-        output_angles = torch.matmul(probabilities, ANGLE_ARR).transpose(0, 1)
 
-        return output_angles, [], batch_sizes
+
+
+
