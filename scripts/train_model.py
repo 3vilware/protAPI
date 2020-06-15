@@ -6,6 +6,7 @@ try:
     from protAPI.proteinnet.util import *
     from protAPI.mailing import send_report_mail
     from protAPI.models import ModelTrained
+    from django.contrib.auth.models import User
 except:
     print("Import error")
     import time
@@ -18,6 +19,8 @@ import argparse
 
 def run_training(model_name, epochs, author, desc=""):
     # pre-process data
+    epochs = int(epochs)
+    author = User.objects.get(pk=author)
     process_raw_data(False, force_pre_processing_overwrite=False)
     model_name = model_name.replace(' ','')
 
@@ -60,3 +63,8 @@ def run_training(model_name, epochs, author, desc=""):
     #                      file_paths=[],
     #                      text="Se detecto un error al intentar entrenar tu modelo:\n")
 
+
+def run(*args):
+    # run_training(model_name, epochs, author, desc=""):
+    # python manage.py runscript train_model --script-args Model Epochs Author
+    run_training(model_name=args[0], epochs=args[1], author=args[1])
