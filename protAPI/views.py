@@ -146,7 +146,7 @@ class GenerateModel(views.APIView):
                 "message": "success"
             }
             print("Model OK")
-            run_training(model_structure.name, model_structure.epochs)
+            run_training(model_structure.name, model_structure.epochs, request.user, model_structure.description)
 
             return Response(data)
         else:

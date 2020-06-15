@@ -26,8 +26,12 @@ class ModelTrained(models.Model):
 
 def upload_model(sender, **kwargs):
     instance = kwargs['instance']
-    file_path = "media/" + str(instance.file)
-    to_storage = cloud_storage.upload_file(file_path, 'protein-public', str(instance.file))
+    try:
+        file_path = "media/" + str(instance.file)
+        to_storage = cloud_storage.upload_file(file_path, 'protein-public', str(instance.file))
+    except:
+        file_path = str(instance.file)
+        to_storage = cloud_storage.upload_file(file_path, 'protein-public', str(instance.file))
 
     if to_storage:
         print("Uploaded to s3")
