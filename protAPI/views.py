@@ -144,7 +144,6 @@ class GenerateModel(views.APIView):
             # f.write(model_structure.code)
             # f.close()
 
-
             data = {
                 "message": "success"
             }
