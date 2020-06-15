@@ -141,6 +141,8 @@ class RrnModel(openprotein.BaseModel):
         return output, backbone_atoms_padded, batch_sizes
 
 
+
+
 class MyModel(openprotein.BaseModel):
     def __init__(self, embedding_size, minibatch_size, use_gpu=False):
         super(MyModel, self).__init__(use_gpu, embedding_size)

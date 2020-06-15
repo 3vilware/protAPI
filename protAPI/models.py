@@ -5,6 +5,17 @@ from django.db.models.signals import post_save, post_delete
 
 # Create your models here.
 
+class ModelStructure(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    name = models.CharField(max_length=100, unique=True)
+    description = models.CharField(max_length=250)
+    code = models.TextField(null=True)
+    fecha = models.DateField(auto_now=True)
+    epochs = models.IntegerField(default=10)
+    # file = models.FileField(null=True)
+    # public = models.BooleanField(default=False)
+
+
 
 class ModelTrained(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)

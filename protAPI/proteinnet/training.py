@@ -10,7 +10,6 @@ except:
     from util import *
 
 import torch.optim as optim
-import requests
 import json
 
 def train_model(data_set_identifier, model, train_loader, validation_loader, learning_rate, minibatch_size=64, eval_interval=50, hide_ui=False, use_gpu=False, minimum_updates=1000):

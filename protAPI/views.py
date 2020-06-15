@@ -16,6 +16,8 @@ from django.core.files import File
 from django.db.models import Q
 import requests
 from protAPI import cloud_storage
+from django.views.decorators.csrf import csrf_exempt
+import json
 import os
 
 try:
@@ -32,8 +34,6 @@ except:
 
 def index(request):
     print("LOADING FUCKING MODEL")
-
-
     def run_experiment():
         # pre-process data
         process_raw_data(False, force_pre_processing_overwrite=False)
@@ -58,12 +58,27 @@ def index(request):
                                        eval_interval=5,
                                        hide_ui=True,
                                        use_gpu=False,
-                                       minimum_updates=100)
+                                       minimum_updates=1) # Epochs
 
         print("Completed training, trained model stored at:")
         print(train_model_path)
     run_experiment()
     return HttpResponse("OK working")
+
+@csrf_exempt
+def generateModel(request):
+    if request.method == 'POST':
+        body = json.loads(request.body)
+        print(body["code"])
+
+        file_path = settings.BASE_DIR + "/protApi/proteinnet/custom_models.py"
+        f = open(file_path, "a")
+        f.write(body["code"])
+        f.close()
+
+        return HttpResponse("OK")
+
+
 
 
 def runJob(request):
