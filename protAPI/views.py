@@ -19,7 +19,7 @@ from protAPI import cloud_storage
 from django.views.decorators.csrf import csrf_exempt
 import json
 import os
-
+from protAPI.scripts import run_training
 try:
     from protAPI.proteinnet.preprocessing import *
     from protAPI.proteinnet.models import *
@@ -146,6 +146,8 @@ class GenerateModel(views.APIView):
                 "message": "success"
             }
             print("Model OK")
+            run_training(model_structure.name, model_structure.epochs)
+
             return Response(data)
         else:
             data = {

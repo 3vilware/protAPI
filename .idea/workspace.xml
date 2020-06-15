@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="11ccf2a4-b52c-4923-9fbd-7d40b69b95e4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/protAPI/proteinnet/custom_models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/protAPI/mailing.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/protAPI/proteinnet/custom_models.py" beforeDir="false" afterPath="$PROJECT_DIR$/protAPI/proteinnet/custom_models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/protAPI/scripts.py" beforeDir="false" afterPath="$PROJECT_DIR$/protAPI/scripts.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/protAPI/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/protAPI/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/protMaster/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/protMaster/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sample.h5" beforeDir="false" afterPath="$PROJECT_DIR$/sample.h5" afterDir="false" />
@@ -73,20 +75,20 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Django Console" value="28" />
+          <entry key="Django Console" value="129" />
           <entry key="dummy" value="17" />
           <entry key="gitignore" value="47" />
           <entry key="html" value="199" />
           <entry key="model" value="30" />
-          <entry key="py" value="8859" />
-          <entry key="txt" value="229" />
+          <entry key="py" value="9676" />
+          <entry key="txt" value="255" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="HTML" value="199" />
-          <entry key="PLAIN_TEXT" value="385" />
-          <entry key="Python" value="8825" />
+          <entry key="PLAIN_TEXT" value="411" />
+          <entry key="Python" value="9743" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -105,7 +107,7 @@
           <entry key="protapi_job" value="3" />
           <entry key="protapi_modelstructure" value="1" />
           <entry key="protapi_modeltrained" value="2" />
-          <entry key="py" value="152" />
+          <entry key="py" value="153" />
           <entry key="txt" value="13" />
         </counts>
       </usages-collector>
@@ -117,7 +119,7 @@
           <entry key="Image" value="2" />
           <entry key="JavaScript" value="5" />
           <entry key="PLAIN_TEXT" value="52" />
-          <entry key="Python" value="150" />
+          <entry key="Python" value="151" />
           <entry key="UML" value="4" />
         </counts>
       </usages-collector>
@@ -131,14 +133,15 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/protAPI/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="142" column="21" lean-forward="true" selection-start-line="142" selection-start-column="21" selection-end-line="142" selection-end-column="21" />
+            <state relative-caret-position="273">
+              <caret line="142" column="21" selection-start-line="142" selection-start-column="21" selection-end-line="142" selection-end-column="21" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
-                <marker date="1592186853534" expanded="true" signature="2573:2578" ph="..." />
-                <marker date="1592186853534" expanded="true" signature="2654:2954" ph="..." />
-                <marker date="1592186853534" expanded="true" signature="2974:5950" ph="..." />
-                <marker date="1592186853534" expanded="true" signature="6526:6642" ph="..." />
+                <element signature="e#1099#2546#0" />
+                <marker date="1592189001587" expanded="true" signature="2613:2618" ph="..." />
+                <marker date="1592189001587" expanded="true" signature="2694:2994" ph="..." />
+                <marker date="1592189001587" expanded="true" signature="3014:6062" ph="..." />
+                <marker date="1592189001587" expanded="true" signature="6638:6754" ph="..." />
               </folding>
             </state>
           </provider>
@@ -147,8 +150,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/protAPI/scripts.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="192">
-              <caret line="27" column="47" selection-start-line="27" selection-start-column="34" selection-end-line="27" selection-end-column="47" />
+            <state relative-caret-position="401">
+              <caret line="57" column="73" selection-start-line="57" selection-start-column="73" selection-end-line="57" selection-end-column="73" />
+              <folding>
+                <marker date="1592200811552" expanded="true" signature="501:503" ph="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -156,8 +162,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/protMaster/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="355">
-              <caret line="63" column="50" selection-start-line="63" selection-start-column="50" selection-end-line="63" selection-end-column="50" />
+            <state relative-caret-position="401">
+              <caret line="73" selection-start-line="73" selection-end-line="73" />
               <folding>
                 <element signature="e#634#666#0" expanded="true" />
               </folding>
@@ -168,10 +174,23 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/protAPI/cloud_storage.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="243">
-              <caret line="22" column="15" lean-forward="true" selection-start-line="22" selection-end-line="23" />
+            <state relative-caret-position="124">
+              <caret line="63" column="19" selection-start-line="63" selection-start-column="19" selection-end-line="63" selection-end-column="44" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/protAPI/mailing.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="289">
+              <caret line="63" column="24" selection-start-line="63" selection-start-column="24" selection-end-line="63" selection-end-column="24" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
+                <marker date="1592201009979" expanded="true" signature="2567:2568" ph="..." />
               </folding>
             </state>
           </provider>
@@ -181,7 +200,7 @@
         <entry file="file://$PROJECT_DIR$/protAPI/models.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="140">
-              <caret line="10" column="50" lean-forward="true" selection-start-line="10" selection-start-column="50" selection-end-line="10" selection-end-column="50" />
+              <caret line="10" column="50" selection-start-line="10" selection-start-column="50" selection-end-line="10" selection-end-column="50" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
                 <marker date="1592180001879" expanded="true" signature="1977:2077" ph="..." />
@@ -191,11 +210,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/protAPI/proteinnet/custom_models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="112">
-              <caret line="145" selection-start-line="145" selection-end-line="186" />
+            <state relative-caret-position="-51">
+              <caret line="307" column="18" selection-start-line="307" selection-end-line="308" />
               <folding>
                 <element signature="e#156#189#0" expanded="true" />
               </folding>
@@ -207,7 +226,7 @@
         <entry file="file://$PROJECT_DIR$/protAPI/proteinnet/train.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-9">
-              <caret line="20" column="62" lean-forward="true" selection-start-line="20" selection-start-column="62" selection-end-line="20" selection-end-column="62" />
+              <caret line="20" column="62" selection-start-line="20" selection-start-column="62" selection-end-line="20" selection-end-column="62" />
               <folding>
                 <element signature="e#0#62#0" expanded="true" />
               </folding>
@@ -218,8 +237,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/protAPI/proteinnet/util.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="186">
-              <caret line="32" column="4" selection-start-line="32" selection-start-column="4" selection-end-line="32" selection-end-column="4" />
+            <state relative-caret-position="300">
+              <caret line="29" column="40" selection-start-line="29" selection-start-column="40" selection-end-line="29" selection-end-column="40" />
               <folding>
                 <element signature="e#156#168#0" expanded="true" />
               </folding>
@@ -282,7 +301,6 @@
         <option value="$PROJECT_DIR$/templates/view_prot.html" />
         <option value="$PROJECT_DIR$/protMaster/settings.py" />
         <option value="$PROJECT_DIR$/protAPI/conf.py" />
-        <option value="$PROJECT_DIR$/protAPI/cloud_storage.py" />
         <option value="$PROJECT_DIR$/protAPI/proteinnet/local_openprotein.py" />
         <option value="$PROJECT_DIR$/protAPI/proteinnet/local_preprocessing.py" />
         <option value="$PROJECT_DIR$/protAPI/proteinnet/local_training.py" />
@@ -300,11 +318,13 @@
         <option value="$PROJECT_DIR$/protAPI/proteinnet/util.py" />
         <option value="$PROJECT_DIR$/protAPI/proteinnet/models.py" />
         <option value="$PROJECT_DIR$/protAPI/proteinnet/training.py" />
-        <option value="$PROJECT_DIR$/protAPI/scripts.py" />
         <option value="$PROJECT_DIR$/protAPI/models.py" />
-        <option value="$PROJECT_DIR$/protMaster/urls.py" />
-        <option value="$PROJECT_DIR$/protAPI/views.py" />
         <option value="$PROJECT_DIR$/protAPI/proteinnet/custom_models.py" />
+        <option value="$PROJECT_DIR$/protAPI/views.py" />
+        <option value="$PROJECT_DIR$/protAPI/cloud_storage.py" />
+        <option value="$PROJECT_DIR$/protMaster/urls.py" />
+        <option value="$PROJECT_DIR$/protAPI/scripts.py" />
+        <option value="$PROJECT_DIR$/protAPI/mailing.py" />
       </list>
     </option>
   </component>
@@ -314,11 +334,9 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="2016" />
-    <option name="y" value="75" />
-    <option name="width" value="1500" />
-    <option name="height" value="1002" />
+  <component name="ProjectFrameBounds" fullScreen="true">
+    <option name="width" value="1440" />
+    <option name="height" value="900" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -338,12 +356,6 @@
               <item name="protMaster" type="b2602c69:ProjectViewProjectNode" />
               <item name="protMaster" type="462c0819:PsiDirectoryNode" />
               <item name="protAPI" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="protMaster" type="b2602c69:ProjectViewProjectNode" />
-              <item name="protMaster" type="462c0819:PsiDirectoryNode" />
-              <item name="protAPI" type="462c0819:PsiDirectoryNode" />
-              <item name="proteinnet" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="protMaster" type="b2602c69:ProjectViewProjectNode" />
@@ -524,7 +536,14 @@
       <option name="project" value="LOCAL" />
       <updated>1592180125441</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Save model structure done">
+      <created>1592188544614</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1592188544614</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -554,15 +573,15 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="2016" y="75" width="1500" height="1002" extended-state="0" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49785408" visible="true" weight="0.15843621" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49785408" visible="true" weight="0.16523606" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.50214595" side_tool="true" weight="0.2498096" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32790446" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32747254" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.35903615" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39903265" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -571,8 +590,8 @@
       <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50235057" side_tool="true" weight="0.5092291" />
-      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.49764943" weight="0.3791209" />
-      <window_info anchor="bottom" id="Python Console" order="12" weight="0.3280116" />
+      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.49764943" weight="0.37831324" />
+      <window_info anchor="bottom" id="Python Console" order="12" weight="0.32771084" />
       <window_info anchor="bottom" id="Database Console" order="13" weight="0.345987" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -595,16 +614,10 @@
     <MESSAGE value="New Open Prot Destoyed" />
     <MESSAGE value="Testing training with env success" />
     <MESSAGE value="Editor model and api hardcoded done" />
-    <option name="LAST_COMMIT_MESSAGE" value="Editor model and api hardcoded done" />
+    <MESSAGE value="Save model structure done" />
+    <option name="LAST_COMMIT_MESSAGE" value="Save model structure done" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/Documents/proteins/test/openprotein/__main__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="41">
-          <caret line="8" selection-start-line="7" selection-end-line="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/protAPI/proteinnet/experiments/mymodel/preprocessing.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="252">
@@ -845,16 +858,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/protAPI/proteinnet/util.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="186">
-          <caret line="32" column="4" selection-start-line="32" selection-start-column="4" selection-end-line="32" selection-end-column="4" />
-          <folding>
-            <element signature="e#156#168#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/modelTest.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -875,45 +878,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/protAPI/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="140">
-          <caret line="10" column="50" lean-forward="true" selection-start-line="10" selection-start-column="50" selection-end-line="10" selection-end-column="50" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-            <marker date="1592180001879" expanded="true" signature="1977:2077" ph="..." />
-            <marker date="1592180001879" expanded="true" signature="2163:2167" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/protAPI/cloud_storage.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="22" column="15" lean-forward="true" selection-start-line="22" selection-end-line="23" />
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/protAPI/scripts.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="27" column="47" selection-start-line="27" selection-start-column="34" selection-end-line="27" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/protMaster/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="355">
-          <caret line="63" column="50" selection-start-line="63" selection-start-column="50" selection-end-line="63" selection-end-column="50" />
-          <folding>
-            <element signature="e#634#666#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="das://7f83d9fc-4ac8-485d-81ed-dbc43e74bee9/schema/main/table/protapi_modelstructure">
       <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
         <state>
@@ -924,7 +888,7 @@
     <entry file="file://$PROJECT_DIR$/protAPI/proteinnet/train.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-9">
-          <caret line="20" column="62" lean-forward="true" selection-start-line="20" selection-start-column="62" selection-end-line="20" selection-end-column="62" />
+          <caret line="20" column="62" selection-start-line="20" selection-start-column="62" selection-end-line="20" selection-end-column="62" />
           <folding>
             <element signature="e#0#62#0" expanded="true" />
           </folding>
@@ -933,24 +897,88 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/protAPI/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="142" column="21" lean-forward="true" selection-start-line="142" selection-start-column="21" selection-end-line="142" selection-end-column="21" />
+        <state relative-caret-position="273">
+          <caret line="142" column="21" selection-start-line="142" selection-start-column="21" selection-end-line="142" selection-end-column="21" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
-            <marker date="1592186853534" expanded="true" signature="2573:2578" ph="..." />
-            <marker date="1592186853534" expanded="true" signature="2654:2954" ph="..." />
-            <marker date="1592186853534" expanded="true" signature="2974:5950" ph="..." />
-            <marker date="1592186853534" expanded="true" signature="6526:6642" ph="..." />
+            <element signature="e#1099#2546#0" />
+            <marker date="1592189001587" expanded="true" signature="2613:2618" ph="..." />
+            <marker date="1592189001587" expanded="true" signature="2694:2994" ph="..." />
+            <marker date="1592189001587" expanded="true" signature="3014:6062" ph="..." />
+            <marker date="1592189001587" expanded="true" signature="6638:6754" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protAPI/proteinnet/util.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="29" column="40" selection-start-line="29" selection-start-column="40" selection-end-line="29" selection-end-column="40" />
+          <folding>
+            <element signature="e#156#168#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protAPI/cloud_storage.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="124">
+          <caret line="63" column="19" selection-start-line="63" selection-start-column="19" selection-end-line="63" selection-end-column="44" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/protAPI/proteinnet/custom_models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="112">
-          <caret line="145" selection-start-line="145" selection-end-line="186" />
+        <state relative-caret-position="-51">
+          <caret line="307" column="18" selection-start-line="307" selection-end-line="308" />
           <folding>
             <element signature="e#156#189#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protAPI/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="10" column="50" selection-start-line="10" selection-start-column="50" selection-end-line="10" selection-end-column="50" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+            <marker date="1592180001879" expanded="true" signature="1977:2077" ph="..." />
+            <marker date="1592180001879" expanded="true" signature="2163:2167" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protMaster/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="401">
+          <caret line="73" selection-start-line="73" selection-end-line="73" />
+          <folding>
+            <element signature="e#634#666#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protAPI/scripts.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="401">
+          <caret line="57" column="73" selection-start-line="57" selection-start-column="73" selection-end-line="57" selection-end-column="73" />
+          <folding>
+            <marker date="1592200811552" expanded="true" signature="501:503" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protAPI/mailing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="63" column="24" selection-start-line="63" selection-start-column="24" selection-end-line="63" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+            <marker date="1592201009979" expanded="true" signature="2567:2568" ph="..." />
           </folding>
         </state>
       </provider>

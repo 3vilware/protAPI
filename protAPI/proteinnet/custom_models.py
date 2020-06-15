@@ -187,3 +187,472 @@ class MyModel(openprotein.BaseModel):
 
 
 
+# Escribe tu modelo aqui
+class FirstModel(openprotein.BaseModel):
+    def __init__(self, embedding_size, minibatch_size, use_gpu=False):
+        super(FirstModel, self).__init__(use_gpu, embedding_size)
+
+        self.hidden_size = 3
+        self.num_lstm_layers = 2
+        self.mixture_size = 500
+        self.bi_lstm = nn.LSTM(self.get_embedding_size(), self.hidden_size,
+                            num_layers=self.num_lstm_layers, bidirectional=True, bias=True)
+        self.hidden_to_labels = nn.Linear(self.hidden_size * 2, self.mixture_size, bias=True) # * 2 for bidirectional
+        self.init_hidden(minibatch_size)
+        self.softmax_to_angle = soft_to_angle(self.mixture_size)
+        self.soft = nn.LogSoftmax(2)
+        self.bn = nn.BatchNorm1d(self.mixture_size)
+
+    def init_hidden(self, minibatch_size):
+        # number of layers (* 2 since bidirectional), minibatch_size, hidden size
+        initial_hidden_state = torch.zeros(self.num_lstm_layers * 2, minibatch_size, self.hidden_size)
+        initial_cell_state = torch.zeros(self.num_lstm_layers * 2, minibatch_size, self.hidden_size)
+        if self.use_gpu:
+            initial_hidden_state = initial_hidden_state.cuda()
+            initial_cell_state = initial_cell_state.cuda()
+        self.hidden_layer = (autograd.Variable(initial_hidden_state),
+                            autograd.Variable(initial_cell_state))
+
+    def _get_network_emissions(self, original_aa_string):
+        packed_input_sequences = self.embed(original_aa_string)
+        minibatch_size = int(packed_input_sequences[1][0])
+        self.init_hidden(minibatch_size)
+        (data, bi_lstm_batches, _, _), self.hidden_layer = self.bi_lstm(packed_input_sequences, self.hidden_layer)
+        emissions_padded, batch_sizes = torch.nn.utils.rnn.pad_packed_sequence(
+            torch.nn.utils.rnn.PackedSequence(self.hidden_to_labels(data), bi_lstm_batches))
+        x = emissions_padded.transpose(0,1).transpose(1,2) # minibatch_size, self.mixture_size, -1
+        x = self.bn(x)
+        x = x.transpose(1,2) #(minibatch_size, -1, self.mixture_size)
+        p = torch.exp(self.soft(x))
+        output_angles = self.softmax_to_angle(p).transpose(0,1) # max size, minibatch size, 3 (angels)
+        backbone_atoms_padded, batch_sizes_backbone = get_backbone_positions_from_angular_prediction(output_angles, batch_sizes, self.use_gpu)
+        return output_angles, backbone_atoms_padded, batch_sizes# Escribe tu modelo aqui
+class FirstModel(openprotein.BaseModel):
+    def __init__(self, embedding_size, minibatch_size, use_gpu=False):
+        super(FirstModel, self).__init__(use_gpu, embedding_size)
+
+        self.hidden_size = 3
+        self.num_lstm_layers = 2
+        self.mixture_size = 500
+        self.bi_lstm = nn.LSTM(self.get_embedding_size(), self.hidden_size,
+                            num_layers=self.num_lstm_layers, bidirectional=True, bias=True)
+        self.hidden_to_labels = nn.Linear(self.hidden_size * 2, self.mixture_size, bias=True) # * 2 for bidirectional
+        self.init_hidden(minibatch_size)
+        self.softmax_to_angle = soft_to_angle(self.mixture_size)
+        self.soft = nn.LogSoftmax(2)
+        self.bn = nn.BatchNorm1d(self.mixture_size)
+
+    def init_hidden(self, minibatch_size):
+        # number of layers (* 2 since bidirectional), minibatch_size, hidden size
+        initial_hidden_state = torch.zeros(self.num_lstm_layers * 2, minibatch_size, self.hidden_size)
+        initial_cell_state = torch.zeros(self.num_lstm_layers * 2, minibatch_size, self.hidden_size)
+        if self.use_gpu:
+            initial_hidden_state = initial_hidden_state.cuda()
+            initial_cell_state = initial_cell_state.cuda()
+        self.hidden_layer = (autograd.Variable(initial_hidden_state),
+                            autograd.Variable(initial_cell_state))
+
+    def _get_network_emissions(self, original_aa_string):
+        packed_input_sequences = self.embed(original_aa_string)
+        minibatch_size = int(packed_input_sequences[1][0])
+        self.init_hidden(minibatch_size)
+        (data, bi_lstm_batches, _, _), self.hidden_layer = self.bi_lstm(packed_input_sequences, self.hidden_layer)
+        emissions_padded, batch_sizes = torch.nn.utils.rnn.pad_packed_sequence(
+            torch.nn.utils.rnn.PackedSequence(self.hidden_to_labels(data), bi_lstm_batches))
+        x = emissions_padded.transpose(0,1).transpose(1,2) # minibatch_size, self.mixture_size, -1
+        x = self.bn(x)
+        x = x.transpose(1,2) #(minibatch_size, -1, self.mixture_size)
+        p = torch.exp(self.soft(x))
+        output_angles = self.softmax_to_angle(p).transpose(0,1) # max size, minibatch size, 3 (angels)
+        backbone_atoms_padded, batch_sizes_backbone = get_backbone_positions_from_angular_prediction(output_angles, batch_sizes, self.use_gpu)
+        return output_angles, backbone_atoms_padded, batch_sizes# Escribe tu modelo aqui
+class SecondModel(openprotein.BaseModel):
+    def __init__(self, embedding_size, minibatch_size, use_gpu=False):
+        super(SecondModel, self).__init__(use_gpu, embedding_size)
+
+        self.hidden_size = 6
+        self.num_lstm_layers = 4
+        self.mixture_size = 500
+        self.bi_lstm = nn.LSTM(self.get_embedding_size(), self.hidden_size,
+                            num_layers=self.num_lstm_layers, bidirectional=True, bias=True)
+        self.hidden_to_labels = nn.Linear(self.hidden_size * 2, self.mixture_size, bias=True) # * 2 for bidirectional
+        self.init_hidden(minibatch_size)
+        self.softmax_to_angle = soft_to_angle(self.mixture_size)
+        self.soft = nn.LogSoftmax(2)
+        self.bn = nn.BatchNorm1d(self.mixture_size)
+
+    def init_hidden(self, minibatch_size):
+        # number of layers (* 2 since bidirectional), minibatch_size, hidden size
+        initial_hidden_state = torch.zeros(self.num_lstm_layers * 2, minibatch_size, self.hidden_size)
+        initial_cell_state = torch.zeros(self.num_lstm_layers * 2, minibatch_size, self.hidden_size)
+        if self.use_gpu:
+            initial_hidden_state = initial_hidden_state.cuda()
+            initial_cell_state = initial_cell_state.cuda()
+        self.hidden_layer = (autograd.Variable(initial_hidden_state),
+                            autograd.Variable(initial_cell_state))
+
+    def _get_network_emissions(self, original_aa_string):
+        packed_input_sequences = self.embed(original_aa_string)
+        minibatch_size = int(packed_input_sequences[1][0])
+        self.init_hidden(minibatch_size)
+        (data, bi_lstm_batches, _, _), self.hidden_layer = self.bi_lstm(packed_input_sequences, self.hidden_layer)
+        emissions_padded, batch_sizes = torch.nn.utils.rnn.pad_packed_sequence(
+            torch.nn.utils.rnn.PackedSequence(self.hidden_to_labels(data), bi_lstm_batches))
+        x = emissions_padded.transpose(0,1).transpose(1,2) # minibatch_size, self.mixture_size, -1
+        x = self.bn(x)
+        x = x.transpose(1,2) #(minibatch_size, -1, self.mixture_size)
+        p = torch.exp(self.soft(x))
+        output_angles = self.softmax_to_angle(p).transpose(0,1) # max size, minibatch size, 3 (angels)
+        backbone_atoms_padded, batch_sizes_backbone = get_backbone_positions_from_angular_prediction(output_angles, batch_sizes, self.use_gpu)
+        return output_angles, backbone_atoms_padded, batch_sizes# Escribe tu modelo aqui 
+class SecondModels(openprotein.BaseModel):
+    def __init__(self, embedding_size, minibatch_size, use_gpu=False):
+        super(SecondModels, self).__init__(use_gpu, embedding_size)
+
+        self.hidden_size = 6
+        self.num_lstm_layers = 4
+        self.mixture_size = 500
+        self.bi_lstm = nn.LSTM(self.get_embedding_size(), self.hidden_size,
+                            num_layers=self.num_lstm_layers, bidirectional=True, bias=True)
+        self.hidden_to_labels = nn.Linear(self.hidden_size * 2, self.mixture_size, bias=True) # * 2 for bidirectional
+        self.init_hidden(minibatch_size)
+        self.softmax_to_angle = soft_to_angle(self.mixture_size)
+        self.soft = nn.LogSoftmax(2)
+        self.bn = nn.BatchNorm1d(self.mixture_size)
+
+    def init_hidden(self, minibatch_size):
+        # number of layers (* 2 since bidirectional), minibatch_size, hidden size
+        initial_hidden_state = torch.zeros(self.num_lstm_layers * 2, minibatch_size, self.hidden_size)
+        initial_cell_state = torch.zeros(self.num_lstm_layers * 2, minibatch_size, self.hidden_size)
+        if self.use_gpu:
+            initial_hidden_state = initial_hidden_state.cuda()
+            initial_cell_state = initial_cell_state.cuda()
+        self.hidden_layer = (autograd.Variable(initial_hidden_state),
+                            autograd.Variable(initial_cell_state))
+
+    def _get_network_emissions(self, original_aa_string):
+        packed_input_sequences = self.embed(original_aa_string)
+        minibatch_size = int(packed_input_sequences[1][0])
+        self.init_hidden(minibatch_size)
+        (data, bi_lstm_batches, _, _), self.hidden_layer = self.bi_lstm(packed_input_sequences, self.hidden_layer)
+        emissions_padded, batch_sizes = torch.nn.utils.rnn.pad_packed_sequence(
+            torch.nn.utils.rnn.PackedSequence(self.hidden_to_labels(data), bi_lstm_batches))
+        x = emissions_padded.transpose(0,1).transpose(1,2) # minibatch_size, self.mixture_size, -1
+        x = self.bn(x)
+        x = x.transpose(1,2) #(minibatch_size, -1, self.mixture_size)
+        p = torch.exp(self.soft(x))
+        output_angles = self.softmax_to_angle(p).transpose(0,1) # max size, minibatch size, 3 (angels)
+        backbone_atoms_padded, batch_sizes_backbone = get_backbone_positions_from_angular_prediction(output_angles, batch_sizes, self.use_gpu)
+        return output_angles, backbone_atoms_padded, batch_sizes# Escribe tu modelo aqui
+class TestLoacal(openprotein.BaseModel):
+    def __init__(self, embedding_size, minibatch_size, use_gpu=False):
+        super(TestLoacal, self).__init__(use_gpu, embedding_size)
+
+        self.hidden_size = 3
+        self.num_lstm_layers = 2
+        self.mixture_size = 500
+        self.bi_lstm = nn.LSTM(self.get_embedding_size(), self.hidden_size,
+                            num_layers=self.num_lstm_layers, bidirectional=True, bias=True)
+        self.hidden_to_labels = nn.Linear(self.hidden_size * 2, self.mixture_size, bias=True) # * 2 for bidirectional
+        self.init_hidden(minibatch_size)
+        self.softmax_to_angle = soft_to_angle(self.mixture_size)
+        self.soft = nn.LogSoftmax(2)
+        self.bn = nn.BatchNorm1d(self.mixture_size)
+
+    def init_hidden(self, minibatch_size):
+        # number of layers (* 2 since bidirectional), minibatch_size, hidden size
+        initial_hidden_state = torch.zeros(self.num_lstm_layers * 2, minibatch_size, self.hidden_size)
+        initial_cell_state = torch.zeros(self.num_lstm_layers * 2, minibatch_size, self.hidden_size)
+        if self.use_gpu:
+            initial_hidden_state = initial_hidden_state.cuda()
+            initial_cell_state = initial_cell_state.cuda()
+        self.hidden_layer = (autograd.Variable(initial_hidden_state),
+                            autograd.Variable(initial_cell_state))
+
+    def _get_network_emissions(self, original_aa_string):
+        packed_input_sequences = self.embed(original_aa_string)
+        minibatch_size = int(packed_input_sequences[1][0])
+        self.init_hidden(minibatch_size)
+        (data, bi_lstm_batches, _, _), self.hidden_layer = self.bi_lstm(packed_input_sequences, self.hidden_layer)
+        emissions_padded, batch_sizes = torch.nn.utils.rnn.pad_packed_sequence(
+            torch.nn.utils.rnn.PackedSequence(self.hidden_to_labels(data), bi_lstm_batches))
+        x = emissions_padded.transpose(0,1).transpose(1,2) # minibatch_size, self.mixture_size, -1
+        x = self.bn(x)
+        x = x.transpose(1,2) #(minibatch_size, -1, self.mixture_size)
+        p = torch.exp(self.soft(x))
+        output_angles = self.softmax_to_angle(p).transpose(0,1) # max size, minibatch size, 3 (angels)
+        backbone_atoms_padded, batch_sizes_backbone = get_backbone_positions_from_angular_prediction(output_angles, batch_sizes, self.use_gpu)
+        return output_angles, backbone_atoms_padded, batch_sizes# Escribe tu modelo aqui
+class TestLoacals(openprotein.BaseModel):
+    def __init__(self, embedding_size, minibatch_size, use_gpu=False):
+        super(TestLoacals, self).__init__(use_gpu, embedding_size)
+
+        self.hidden_size = 3
+        self.num_lstm_layers = 2
+        self.mixture_size = 500
+        self.bi_lstm = nn.LSTM(self.get_embedding_size(), self.hidden_size,
+                            num_layers=self.num_lstm_layers, bidirectional=True, bias=True)
+        self.hidden_to_labels = nn.Linear(self.hidden_size * 2, self.mixture_size, bias=True) # * 2 for bidirectional
+        self.init_hidden(minibatch_size)
+        self.softmax_to_angle = soft_to_angle(self.mixture_size)
+        self.soft = nn.LogSoftmax(2)
+        self.bn = nn.BatchNorm1d(self.mixture_size)
+
+    def init_hidden(self, minibatch_size):
+        # number of layers (* 2 since bidirectional), minibatch_size, hidden size
+        initial_hidden_state = torch.zeros(self.num_lstm_layers * 2, minibatch_size, self.hidden_size)
+        initial_cell_state = torch.zeros(self.num_lstm_layers * 2, minibatch_size, self.hidden_size)
+        if self.use_gpu:
+            initial_hidden_state = initial_hidden_state.cuda()
+            initial_cell_state = initial_cell_state.cuda()
+        self.hidden_layer = (autograd.Variable(initial_hidden_state),
+                            autograd.Variable(initial_cell_state))
+
+    def _get_network_emissions(self, original_aa_string):
+        packed_input_sequences = self.embed(original_aa_string)
+        minibatch_size = int(packed_input_sequences[1][0])
+        self.init_hidden(minibatch_size)
+        (data, bi_lstm_batches, _, _), self.hidden_layer = self.bi_lstm(packed_input_sequences, self.hidden_layer)
+        emissions_padded, batch_sizes = torch.nn.utils.rnn.pad_packed_sequence(
+            torch.nn.utils.rnn.PackedSequence(self.hidden_to_labels(data), bi_lstm_batches))
+        x = emissions_padded.transpose(0,1).transpose(1,2) # minibatch_size, self.mixture_size, -1
+        x = self.bn(x)
+        x = x.transpose(1,2) #(minibatch_size, -1, self.mixture_size)
+        p = torch.exp(self.soft(x))
+        output_angles = self.softmax_to_angle(p).transpose(0,1) # max size, minibatch size, 3 (angels)
+        backbone_atoms_padded, batch_sizes_backbone = get_backbone_positions_from_angular_prediction(output_angles, batch_sizes, self.use_gpu)
+        return output_angles, backbone_atoms_padded, batch_sizes# Escribe tu modelo aqui
+class V2(openprotein.BaseModel):
+    def __init__(self, embedding_size, minibatch_size, use_gpu=False):
+        super(V2, self).__init__(use_gpu, embedding_size)
+
+        self.hidden_size = 3
+        self.num_lstm_layers = 2
+        self.mixture_size = 500
+        self.bi_lstm = nn.LSTM(self.get_embedding_size(), self.hidden_size,
+                            num_layers=self.num_lstm_layers, bidirectional=True, bias=True)
+        self.hidden_to_labels = nn.Linear(self.hidden_size * 2, self.mixture_size, bias=True) # * 2 for bidirectional
+        self.init_hidden(minibatch_size)
+        self.softmax_to_angle = soft_to_angle(self.mixture_size)
+        self.soft = nn.LogSoftmax(2)
+        self.bn = nn.BatchNorm1d(self.mixture_size)
+
+    def init_hidden(self, minibatch_size):
+        # number of layers (* 2 since bidirectional), minibatch_size, hidden size
+        initial_hidden_state = torch.zeros(self.num_lstm_layers * 2, minibatch_size, self.hidden_size)
+        initial_cell_state = torch.zeros(self.num_lstm_layers * 2, minibatch_size, self.hidden_size)
+        if self.use_gpu:
+            initial_hidden_state = initial_hidden_state.cuda()
+            initial_cell_state = initial_cell_state.cuda()
+        self.hidden_layer = (autograd.Variable(initial_hidden_state),
+                            autograd.Variable(initial_cell_state))
+
+    def _get_network_emissions(self, original_aa_string):
+        packed_input_sequences = self.embed(original_aa_string)
+        minibatch_size = int(packed_input_sequences[1][0])
+        self.init_hidden(minibatch_size)
+        (data, bi_lstm_batches, _, _), self.hidden_layer = self.bi_lstm(packed_input_sequences, self.hidden_layer)
+        emissions_padded, batch_sizes = torch.nn.utils.rnn.pad_packed_sequence(
+            torch.nn.utils.rnn.PackedSequence(self.hidden_to_labels(data), bi_lstm_batches))
+        x = emissions_padded.transpose(0,1).transpose(1,2) # minibatch_size, self.mixture_size, -1
+        x = self.bn(x)
+        x = x.transpose(1,2) #(minibatch_size, -1, self.mixture_size)
+        p = torch.exp(self.soft(x))
+        output_angles = self.softmax_to_angle(p).transpose(0,1) # max size, minibatch size, 3 (angels)
+        backbone_atoms_padded, batch_sizes_backbone = get_backbone_positions_from_angular_prediction(output_angles, batch_sizes, self.use_gpu)
+        return output_angles, backbone_atoms_padded, batch_sizes# Escribe tu modelo aqui
+class V3(openprotein.BaseModel):
+    def __init__(self, embedding_size, minibatch_size, use_gpu=False):
+        super(V3, self).__init__(use_gpu, embedding_size)
+
+        self.hidden_size = 3
+        self.num_lstm_layers = 2
+        self.mixture_size = 500
+        self.bi_lstm = nn.LSTM(self.get_embedding_size(), self.hidden_size,
+                            num_layers=self.num_lstm_layers, bidirectional=True, bias=True)
+        self.hidden_to_labels = nn.Linear(self.hidden_size * 2, self.mixture_size, bias=True) # * 2 for bidirectional
+        self.init_hidden(minibatch_size)
+        self.softmax_to_angle = soft_to_angle(self.mixture_size)
+        self.soft = nn.LogSoftmax(2)
+        self.bn = nn.BatchNorm1d(self.mixture_size)
+
+    def init_hidden(self, minibatch_size):
+        # number of layers (* 2 since bidirectional), minibatch_size, hidden size
+        initial_hidden_state = torch.zeros(self.num_lstm_layers * 2, minibatch_size, self.hidden_size)
+        initial_cell_state = torch.zeros(self.num_lstm_layers * 2, minibatch_size, self.hidden_size)
+        if self.use_gpu:
+            initial_hidden_state = initial_hidden_state.cuda()
+            initial_cell_state = initial_cell_state.cuda()
+        self.hidden_layer = (autograd.Variable(initial_hidden_state),
+                            autograd.Variable(initial_cell_state))
+
+    def _get_network_emissions(self, original_aa_string):
+        packed_input_sequences = self.embed(original_aa_string)
+        minibatch_size = int(packed_input_sequences[1][0])
+        self.init_hidden(minibatch_size)
+        (data, bi_lstm_batches, _, _), self.hidden_layer = self.bi_lstm(packed_input_sequences, self.hidden_layer)
+        emissions_padded, batch_sizes = torch.nn.utils.rnn.pad_packed_sequence(
+            torch.nn.utils.rnn.PackedSequence(self.hidden_to_labels(data), bi_lstm_batches))
+        x = emissions_padded.transpose(0,1).transpose(1,2) # minibatch_size, self.mixture_size, -1
+        x = self.bn(x)
+        x = x.transpose(1,2) #(minibatch_size, -1, self.mixture_size)
+        p = torch.exp(self.soft(x))
+        output_angles = self.softmax_to_angle(p).transpose(0,1) # max size, minibatch size, 3 (angels)
+        backbone_atoms_padded, batch_sizes_backbone = get_backbone_positions_from_angular_prediction(output_angles, batch_sizes, self.use_gpu)
+        return output_angles, backbone_atoms_padded, batch_sizes# Escribe tu modelo aqui
+class MyModel(openprotein.BaseModel):
+    def __init__(self, embedding_size, minibatch_size, use_gpu=False):
+        super(MyModel, self).__init__(use_gpu, embedding_size)
+
+        self.hidden_size = 3
+        self.num_lstm_layers = 2
+        self.mixture_size = 500
+        self.bi_lstm = nn.LSTM(self.get_embedding_size(), self.hidden_size,
+                            num_layers=self.num_lstm_layers, bidirectional=True, bias=True)
+        self.hidden_to_labels = nn.Linear(self.hidden_size * 2, self.mixture_size, bias=True) # * 2 for bidirectional
+        self.init_hidden(minibatch_size)
+        self.softmax_to_angle = soft_to_angle(self.mixture_size)
+        self.soft = nn.LogSoftmax(2)
+        self.bn = nn.BatchNorm1d(self.mixture_size)
+
+    def init_hidden(self, minibatch_size):
+        # number of layers (* 2 since bidirectional), minibatch_size, hidden size
+        initial_hidden_state = torch.zeros(self.num_lstm_layers * 2, minibatch_size, self.hidden_size)
+        initial_cell_state = torch.zeros(self.num_lstm_layers * 2, minibatch_size, self.hidden_size)
+        if self.use_gpu:
+            initial_hidden_state = initial_hidden_state.cuda()
+            initial_cell_state = initial_cell_state.cuda()
+        self.hidden_layer = (autograd.Variable(initial_hidden_state),
+                            autograd.Variable(initial_cell_state))
+
+    def _get_network_emissions(self, original_aa_string):
+        packed_input_sequences = self.embed(original_aa_string)
+        minibatch_size = int(packed_input_sequences[1][0])
+        self.init_hidden(minibatch_size)
+        (data, bi_lstm_batches, _, _), self.hidden_layer = self.bi_lstm(packed_input_sequences, self.hidden_layer)
+        emissions_padded, batch_sizes = torch.nn.utils.rnn.pad_packed_sequence(
+            torch.nn.utils.rnn.PackedSequence(self.hidden_to_labels(data), bi_lstm_batches))
+        x = emissions_padded.transpose(0,1).transpose(1,2) # minibatch_size, self.mixture_size, -1
+        x = self.bn(x)
+        x = x.transpose(1,2) #(minibatch_size, -1, self.mixture_size)
+        p = torch.exp(self.soft(x))
+        output_angles = self.softmax_to_angle(p).transpose(0,1) # max size, minibatch size, 3 (angels)
+        backbone_atoms_padded, batch_sizes_backbone = get_backbone_positions_from_angular_prediction(output_angles, batch_sizes, self.use_gpu)
+        return output_angles, backbone_atoms_padded, batch_sizes# Escribe tu modelo. Puedes sobre escribir esta plantilla (Python 3.8)
+class MyModel(openprotein.BaseModel):
+    def __init__(self, embedding_size, minibatch_size, use_gpu=False):
+        super(MyModel, self).__init__(use_gpu, embedding_size)
+
+        self.hidden_size = 3
+        self.num_lstm_layers = 2
+        self.mixture_size = 500
+        self.bi_lstm = nn.LSTM(self.get_embedding_size(), self.hidden_size,
+                            num_layers=self.num_lstm_layers, bidirectional=True, bias=True)
+        self.hidden_to_labels = nn.Linear(self.hidden_size * 2, self.mixture_size, bias=True) # * 2 for bidirectional
+        self.init_hidden(minibatch_size)
+        self.softmax_to_angle = soft_to_angle(self.mixture_size)
+        self.soft = nn.LogSoftmax(2)
+        self.bn = nn.BatchNorm1d(self.mixture_size)
+
+    def init_hidden(self, minibatch_size):
+        # number of layers (* 2 since bidirectional), minibatch_size, hidden size
+        initial_hidden_state = torch.zeros(self.num_lstm_layers * 2, minibatch_size, self.hidden_size)
+        initial_cell_state = torch.zeros(self.num_lstm_layers * 2, minibatch_size, self.hidden_size)
+        if self.use_gpu:
+            initial_hidden_state = initial_hidden_state.cuda()
+            initial_cell_state = initial_cell_state.cuda()
+        self.hidden_layer = (autograd.Variable(initial_hidden_state),
+                            autograd.Variable(initial_cell_state))
+
+    def _get_network_emissions(self, original_aa_string):
+        packed_input_sequences = self.embed(original_aa_string)
+        minibatch_size = int(packed_input_sequences[1][0])
+        self.init_hidden(minibatch_size)
+        (data, bi_lstm_batches, _, _), self.hidden_layer = self.bi_lstm(packed_input_sequences, self.hidden_layer)
+        emissions_padded, batch_sizes = torch.nn.utils.rnn.pad_packed_sequence(
+            torch.nn.utils.rnn.PackedSequence(self.hidden_to_labels(data), bi_lstm_batches))
+        x = emissions_padded.transpose(0,1).transpose(1,2) # minibatch_size, self.mixture_size, -1
+        x = self.bn(x)
+        x = x.transpose(1,2) #(minibatch_size, -1, self.mixture_size)
+        p = torch.exp(self.soft(x))
+        output_angles = self.softmax_to_angle(p).transpose(0,1) # max size, minibatch size, 3 (angels)
+        backbone_atoms_padded, batch_sizes_backbone = get_backbone_positions_from_angular_prediction(output_angles, batch_sizes, self.use_gpu)
+        return output_angles, backbone_atoms_padded, batch_sizes# Escribe tu modelo. Puedes sobre escribir esta plantilla (Python 3.8)
+class qq(openprotein.BaseModel):
+    def __init__(self, embedding_size, minibatch_size, use_gpu=False):
+        super(qq, self).__init__(use_gpu, embedding_size)
+
+        self.hidden_size = 3
+        self.num_lstm_layers = 2
+        self.mixture_size = 500
+        self.bi_lstm = nn.LSTM(self.get_embedding_size(), self.hidden_size,
+                            num_layers=self.num_lstm_layers, bidirectional=True, bias=True)
+        self.hidden_to_labels = nn.Linear(self.hidden_size * 2, self.mixture_size, bias=True) # * 2 for bidirectional
+        self.init_hidden(minibatch_size)
+        self.softmax_to_angle = soft_to_angle(self.mixture_size)
+        self.soft = nn.LogSoftmax(2)
+        self.bn = nn.BatchNorm1d(self.mixture_size)
+
+    def init_hidden(self, minibatch_size):
+        # number of layers (* 2 since bidirectional), minibatch_size, hidden size
+        initial_hidden_state = torch.zeros(self.num_lstm_layers * 2, minibatch_size, self.hidden_size)
+        initial_cell_state = torch.zeros(self.num_lstm_layers * 2, minibatch_size, self.hidden_size)
+        if self.use_gpu:
+            initial_hidden_state = initial_hidden_state.cuda()
+            initial_cell_state = initial_cell_state.cuda()
+        self.hidden_layer = (autograd.Variable(initial_hidden_state),
+                            autograd.Variable(initial_cell_state))
+
+    def _get_network_emissions(self, original_aa_string):
+        packed_input_sequences = self.embed(original_aa_string)
+        minibatch_size = int(packed_input_sequences[1][0])
+        self.init_hidden(minibatch_size)
+        (data, bi_lstm_batches, _, _), self.hidden_layer = self.bi_lstm(packed_input_sequences, self.hidden_layer)
+        emissions_padded, batch_sizes = torch.nn.utils.rnn.pad_packed_sequence(
+            torch.nn.utils.rnn.PackedSequence(self.hidden_to_labels(data), bi_lstm_batches))
+        x = emissions_padded.transpose(0,1).transpose(1,2) # minibatch_size, self.mixture_size, -1
+        x = self.bn(x)
+        x = x.transpose(1,2) #(minibatch_size, -1, self.mixture_size)
+        p = torch.exp(self.soft(x))
+        output_angles = self.softmax_to_angle(p).transpose(0,1) # max size, minibatch size, 3 (angels)
+        backbone_atoms_padded, batch_sizes_backbone = get_backbone_positions_from_angular_prediction(output_angles, batch_sizes, self.use_gpu)
+        return output_angles, backbone_atoms_padded, batch_sizes# Escribe tu modelo. Puedes sobre escribir esta plantilla (Python 3.8)
+class q1(openprotein.BaseModel):
+    def __init__(self, embedding_size, minibatch_size, use_gpu=False):
+        super(q1, self).__init__(use_gpu, embedding_size)
+
+        self.hidden_size = 3
+        self.num_lstm_layers = 2
+        self.mixture_size = 500
+        self.bi_lstm = nn.LSTM(self.get_embedding_size(), self.hidden_size,
+                            num_layers=self.num_lstm_layers, bidirectional=True, bias=True)
+        self.hidden_to_labels = nn.Linear(self.hidden_size * 2, self.mixture_size, bias=True) # * 2 for bidirectional
+        self.init_hidden(minibatch_size)
+        self.softmax_to_angle = soft_to_angle(self.mixture_size)
+        self.soft = nn.LogSoftmax(2)
+        self.bn = nn.BatchNorm1d(self.mixture_size)
+
+    def init_hidden(self, minibatch_size):
+        # number of layers (* 2 since bidirectional), minibatch_size, hidden size
+        initial_hidden_state = torch.zeros(self.num_lstm_layers * 2, minibatch_size, self.hidden_size)
+        initial_cell_state = torch.zeros(self.num_lstm_layers * 2, minibatch_size, self.hidden_size)
+        if self.use_gpu:
+            initial_hidden_state = initial_hidden_state.cuda()
+            initial_cell_state = initial_cell_state.cuda()
+        self.hidden_layer = (autograd.Variable(initial_hidden_state),
+                            autograd.Variable(initial_cell_state))
+
+    def _get_network_emissions(self, original_aa_string):
+        packed_input_sequences = self.embed(original_aa_string)
+        minibatch_size = int(packed_input_sequences[1][0])
+        self.init_hidden(minibatch_size)
+        (data, bi_lstm_batches, _, _), self.hidden_layer = self.bi_lstm(packed_input_sequences, self.hidden_layer)
+        emissions_padded, batch_sizes = torch.nn.utils.rnn.pad_packed_sequence(
+            torch.nn.utils.rnn.PackedSequence(self.hidden_to_labels(data), bi_lstm_batches))
+        x = emissions_padded.transpose(0,1).transpose(1,2) # minibatch_size, self.mixture_size, -1
+        x = self.bn(x)
+        x = x.transpose(1,2) #(minibatch_size, -1, self.mixture_size)
+        p = torch.exp(self.soft(x))
+        output_angles = self.softmax_to_angle(p).transpose(0,1) # max size, minibatch size, 3 (angels)
+        backbone_atoms_padded, batch_sizes_backbone = get_backbone_positions_from_angular_prediction(output_angles, batch_sizes, self.use_gpu)
+        return output_angles, backbone_atoms_padded, batch_sizes
