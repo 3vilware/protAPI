@@ -28,36 +28,36 @@ def run_training(model_name, epochs, author, desc=""):
     validation_file = settings.BASE_DIR + "/protAPI/proteinnet/data/preprocessed/sample.txt.hdf5"
     # validation_file = args.input_file
 
-    try:
+    # try:
 
-        dinamic_model = getattr(importlib.import_module("protAPI.proteinnet.custom_models"), model_name)
+    dinamic_model = getattr(importlib.import_module("protAPI.proteinnet.custom_models"), model_name)
 
-        model = dinamic_model(21, 5, use_gpu=False)  # embed size = 21
+    model = dinamic_model(21, use_gpu=False)  # embed size = 21
 
 
-        train_loader = contruct_dataloader_from_disk(training_file, 5)
-        validation_loader = contruct_dataloader_from_disk(validation_file, 5)
+    train_loader = contruct_dataloader_from_disk(training_file, 5)
+    validation_loader = contruct_dataloader_from_disk(validation_file, 5)
 
-        train_model_path = train_model(data_set_identifier="TRAINXX",
-                                       model=model,
-                                       train_loader=train_loader,
-                                       validation_loader=validation_loader,
-                                       learning_rate=0.1,
-                                       minibatch_size=5,
-                                       eval_interval=5,
-                                       hide_ui=True,
-                                       use_gpu=False,
-                                       minimum_updates=epochs) # Epochs
+    train_model_path = train_model(data_set_identifier="TRAINXX",
+                                   model=model,
+                                   train_loader=train_loader,
+                                   validation_loader=validation_loader,
+                                   learning_rate=0.1,
+                                   minibatch_size=5,
+                                   eval_interval=5,
+                                   hide_ui=True,
+                                   use_gpu=False,
+                                   minimum_updates=epochs) # Epochs
 
-        print("Completed training, trained model stored at:")
-        print(train_model_path)
-        model_trained = ModelTrained(author=author, name=model_name, description=desc, file=train_model_path)
-        model_trained.save()
-        send_report_mail("ricardoamadorcast@gmail.com", title="Entrenamiento Listo", html="", file_paths=[train_model_path],
-                         text="Tu modelo esta listo para que lo pruebes ")
-    except Exception as e:
-        print("Error en entrenamiento:", e)
-        send_report_mail("ricardoamadorcast@gmail.com", title="Entrenamiento Fallido", html="Se detecto un error al intentar entrenar tu modelo: <h5 style='color:red'>"+str(e)+"</h5>",
-                         file_paths=[],
-                         text="Se detecto un error al intentar entrenar tu modelo:\n")
+    print("Completed training, trained model stored at:")
+    print(train_model_path)
+    model_trained = ModelTrained(author=author, name=model_name, description=desc, file=train_model_path)
+    model_trained.save()
+    send_report_mail("ricardoamadorcast@gmail.com", title="Entrenamiento Listo", html="", file_paths=[train_model_path],
+                     text="Tu modelo esta listo para que lo pruebes ")
+    # except Exception as e:
+    #     print("Error en entrenamiento:", e)
+    #     send_report_mail("ricardoamadorcast@gmail.com", title="Entrenamiento Fallido", html="Se detecto un error al intentar entrenar tu modelo: <h5 style='color:red'>"+str(e)+"</h5>",
+    #                      file_paths=[],
+    #                      text="Se detecto un error al intentar entrenar tu modelo:\n")
 
