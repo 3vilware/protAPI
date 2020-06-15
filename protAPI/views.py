@@ -65,6 +65,7 @@ def index(request):
     run_experiment()
     return HttpResponse("OK working")
 
+
 @csrf_exempt
 def generateModel(request):
     if request.method == 'POST':
@@ -76,7 +77,7 @@ def generateModel(request):
         f.write(body["code"])
         f.close()
 
-        return HttpResponse("OK")
+        return JsonResponse("")
 
 
 
@@ -127,6 +128,31 @@ class TestEndpoint(views.APIView):
     def get(self, request):
         data = {"user": request.user.username}
         return Response(data)
+
+
+class GenerateModel(views.APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        serializer = ModelStructureSerilizer(data=request.data)
+        if serializer.is_valid():
+            model_structure = serializer.save()
+            file_path = settings.BASE_DIR + "/protApi/proteinnet/custom_models.py"
+            f = open(file_path, "a")
+            f.write(model_structure.code)
+            f.close()
+
+            data = {
+                "message": "success"
+            }
+            print("Model OK")
+            return Response(data)
+        else:
+            data = {
+                "message": "error"
+            }
+            return Response(data)
+
 
 class RunJob(views.APIView):
     permission_classes = (IsAuthenticated,)
@@ -188,6 +214,12 @@ class JobSerilizer(serializers.ModelSerializer):
 class ModelTrainedSerilizer(serializers.ModelSerializer):
     class Meta:
         model = ModelTrained
+        fields = '__all__'
+        read_only_fields = ['author']
+
+class ModelStructureSerilizer(serializers.ModelSerializer):
+    class Meta:
+        model = ModelStructure
         fields = '__all__'
         read_only_fields = ['author']
 
