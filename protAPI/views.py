@@ -139,16 +139,24 @@ class GenerateModel(views.APIView):
         serializer = ModelStructureSerilizer(data=request.data)
         if serializer.is_valid():
             model_structure = serializer.save()
-            file_path = settings.BASE_DIR + "/protApi/proteinnet/custom_models.py"
-            f = open(file_path, "a")
-            f.write(model_structure.code)
-            f.close()
+            # file_path = settings.BASE_DIR + "/protApi/proteinnet/custom_models.py"
+            # f = open(file_path, "a")
+            # f.write(model_structure.code)
+            # f.close()
+
 
             data = {
                 "message": "success"
             }
             print("Model OK")
-            run_training(model_structure.name, model_structure.epochs, request.user, model_structure.description)
+            import os
+            cmd_to_file = "python manage.py runscript write_model --script-args " + model_structure.name
+            cmd_to_train = "python manage.py runscript train_model --script-args " + model_structure.name + " " + "1 " + "11" + " test"
+            print(cmd_to_file)
+            print(cmd_to_train)
+            os.system(cmd_to_file)
+            os.system(cmd_to_train)
+            # run_training(model_structure.name, model_structure.epochs, request.user, model_structure.description)
 
             return Response(data)
         else:
