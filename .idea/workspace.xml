@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="11ccf2a4-b52c-4923-9fbd-7d40b69b95e4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/scripts/train_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/protAPI/proteinnet/custom_models.py" beforeDir="false" afterPath="$PROJECT_DIR$/protAPI/proteinnet/custom_models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/protAPI/scripts.py" beforeDir="false" afterPath="$PROJECT_DIR$/protAPI/scripts.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/protAPI/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/protAPI/tests.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/protMaster/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/protMaster/settings.py" afterDir="false" />
-    </list>
+    <list default="true" id="11ccf2a4-b52c-4923-9fbd-7d40b69b95e4" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,13 +72,13 @@
           <entry key="html" value="199" />
           <entry key="model" value="30" />
           <entry key="py" value="10486" />
-          <entry key="txt" value="356" />
+          <entry key="txt" value="381" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="HTML" value="199" />
-          <entry key="PLAIN_TEXT" value="512" />
+          <entry key="PLAIN_TEXT" value="537" />
           <entry key="Python" value="10568" />
         </counts>
       </usages-collector>
@@ -212,8 +204,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scripts/train_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="166">
-              <caret line="23" column="65" lean-forward="true" selection-start-line="23" selection-start-column="65" selection-end-line="23" selection-end-column="65" />
+            <state relative-caret-position="364">
+              <caret line="68" column="26" selection-start-line="68" selection-start-column="26" selection-end-line="68" selection-end-column="78" />
               <folding>
                 <marker date="1592254333331" expanded="true" signature="2821:2826" ph="..." />
               </folding>
@@ -608,7 +600,14 @@
       <option name="project" value="LOCAL" />
       <updated>1592219329881</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Slave scripts working">
+      <created>1592254783169</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1592254783169</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -685,7 +684,8 @@
     <MESSAGE value="backen v1 ready" />
     <MESSAGE value="New protnet version updated" />
     <MESSAGE value="New protnet version updated fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="New protnet version updated fix" />
+    <MESSAGE value="Slave scripts working" />
+    <option name="LAST_COMMIT_MESSAGE" value="Slave scripts working" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/venv/lib/python3.7/site-packages/torch/nn/modules/linear.py">
@@ -1044,8 +1044,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/train_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="166">
-          <caret line="23" column="65" lean-forward="true" selection-start-line="23" selection-start-column="65" selection-end-line="23" selection-end-column="65" />
+        <state relative-caret-position="364">
+          <caret line="68" column="26" selection-start-line="68" selection-start-column="26" selection-end-line="68" selection-end-column="78" />
           <folding>
             <marker date="1592254333331" expanded="true" signature="2821:2826" ph="..." />
           </folding>
