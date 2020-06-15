@@ -38,7 +38,10 @@ class BaseModel(nn.Module):
         for tensor in original_aa_string:
             padding_to_add = torch.zeros(max_len-tensor.size(0)).int()
             print(tensor, padding_to_add)
-            seqs.append(torch.cat((tensor, padding_to_add.type(torch.LongTensor))))
+            try:
+                seqs.append(torch.cat((tensor, padding_to_add.type(torch.LongTensor))))
+            except RuntimeError:
+                seqs.append(torch.cat((tensor, padding_to_add)))
 
         data = torch.stack(seqs).transpose(0, 1)
 
