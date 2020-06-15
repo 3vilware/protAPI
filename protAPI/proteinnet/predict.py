@@ -7,6 +7,8 @@
 import torch
 from protAPI.proteinnet.util import *
 from protMaster import settings
+from protAPI.cloud_storage import download_file
+import os
 
 def init():
     input_sequences = ["VLSAADKTNVKAAWSKVGGHAGEYGAEALERMFLGFPTTKTYFPHFDLSHGSAQVKAHGKKVADGLTLAVGHLDDLPGALSDLSNLHAHKLRVDPVNFKLLSHCLLSTLAVHLPNDFTPAVHASLDKFLSSVSTVLTSKYR"]
@@ -37,8 +39,16 @@ def run_job(aa_chain, model="", job_id=""):
     model_path = settings.BASE_DIR + settings.MEDIA_URL + model
     print(model_path)
 
+    try:
+        model = torch.load(model_path)
+    except:
+        print("Model on db", model)
+        object_name = model_path.split("/")[-1]
+        print("objectname", object_name)
+        download_file(file_path=os.path.join(settings.MEDIA_ROOT, object_name), object_name=object_name)
+        model_path = settings.BASE_DIR + settings.MEDIA_URL + object_name
+        model = torch.load(model_path)
 
-    model = torch.load(model_path)
     input_senquences_encoded = list(torch.LongTensor(encode_primary_string(aa)) for aa in input_sequences)
 
     predicted_dihedral_angles, predicted_backbone_atoms, batch_sizes = model(input_senquences_encoded)

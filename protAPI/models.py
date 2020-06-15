@@ -31,7 +31,9 @@ def upload_model(sender, **kwargs):
         to_storage = cloud_storage.upload_file(file_path, 'protein-public', str(instance.file))
     except:
         file_path = str(instance.file)
-        to_storage = cloud_storage.upload_file(file_path, 'protein-public', str(instance.file))
+        file_name = str(instance.file).split("/")[-1]
+        print(file_path, "ON S3 EXCEPT")
+        to_storage = cloud_storage.upload_file(file_path, 'protein-public', file_name)
 
     if to_storage:
         print("Uploaded to s3")
