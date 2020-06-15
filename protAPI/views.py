@@ -119,7 +119,9 @@ class Register(views.APIView):
                 print("OK CREATED")
                 return Response({"token":token.key}, status=status.HTTP_201_CREATED)
         else:
-           return Response(serializer.errors)
+            print("Errors")
+            print(serializer.errors)
+            return Response(serializer.errors)
 
 
 class TestEndpoint(views.APIView):
