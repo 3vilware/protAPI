@@ -75,4 +75,4 @@ def run_training(model_name, epochs, author, desc=""):
 def run(*args):
     # run_training(model_name, epochs, author, desc=""):
     # python manage.py runscript train_model --script-args Model Epochs Author
-    run_training(model_name=args[0], epochs=args[1], author=args[1])
+    run_training(model_name=args[0], epochs=args[1], author=args[2])

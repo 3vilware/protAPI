@@ -414,4 +414,172 @@ class noreboot2(openprotein.BaseModel):
         
         batch_sizes = list([a.size() for a in original_aa_string])
 
+        return output_angles, [], batch_sizes# Escribe tu modelo. Puedes sobre escribir esta plantilla (Python 3.8)
+class qwe2(openprotein.BaseModel):
+    def __init__(self, embedding_size, use_gpu=False):
+        super(qwe2, self).__init__(use_gpu, embedding_size)
+        self.use_gpu = use_gpu
+        self.number_angles = 3
+        self.input_to_angles = nn.Linear(embedding_size, self.number_angles)
+
+
+    def _get_network_emissions(self, original_aa_string):
+        embedded_input = self.embed(original_aa_string)
+        emissions_padded = self.input_to_angles(embedded_input)
+
+        emissions = emissions_padded.transpose(0, 1)  # minibatch_size, self.mixture_size, -1
+
+        probabilities = torch.softmax(emissions, 2) # p
+
+        output_angles = torch.matmul(probabilities, ANGLE_ARR).transpose(0, 1)
+        
+        batch_sizes = list([a.size() for a in original_aa_string])
+
+        return output_angles, [], batch_sizes# Escribe tu modelo. Puedes sobre escribir esta plantilla (Python 3.8)
+class qwe3(openprotein.BaseModel):
+    def __init__(self, embedding_size, use_gpu=False):
+        super(qwe3, self).__init__(use_gpu, embedding_size)
+        self.use_gpu = use_gpu
+        self.number_angles = 3
+        self.input_to_angles = nn.Linear(embedding_size, self.number_angles)
+
+
+    def _get_network_emissions(self, original_aa_string):
+        embedded_input = self.embed(original_aa_string)
+        emissions_padded = self.input_to_angles(embedded_input)
+
+        emissions = emissions_padded.transpose(0, 1)  # minibatch_size, self.mixture_size, -1
+
+        probabilities = torch.softmax(emissions, 2) # p
+
+        output_angles = torch.matmul(probabilities, ANGLE_ARR).transpose(0, 1)
+        
+        batch_sizes = list([a.size() for a in original_aa_string])
+
+        return output_angles, [], batch_sizes# Escribe tu modelo. Puedes sobre escribir esta plantilla (Python 3.8)
+class qw2(openprotein.BaseModel):
+    def __init__(self, embedding_size, use_gpu=False):
+        super(qw2, self).__init__(use_gpu, embedding_size)
+        self.use_gpu = use_gpu
+        self.number_angles = 3
+        self.input_to_angles = nn.Linear(embedding_size, self.number_angles)
+
+
+    def _get_network_emissions(self, original_aa_string):
+        embedded_input = self.embed(original_aa_string)
+        emissions_padded = self.input_to_angles(embedded_input)
+
+        emissions = emissions_padded.transpose(0, 1)  # minibatch_size, self.mixture_size, -1
+
+        probabilities = torch.softmax(emissions, 2) # p
+
+        output_angles = torch.matmul(probabilities, ANGLE_ARR).transpose(0, 1)
+        
+        batch_sizes = list([a.size() for a in original_aa_string])
+
+        return output_angles, [], batch_sizes# Escribe tu modelo. Puedes sobre escribir esta plantilla (Python 3.8)
+class Circles(openprotein.BaseModel):
+    def __init__(self, embedding_size, use_gpu=False):
+        super(Circles, self).__init__(use_gpu, embedding_size)
+        self.use_gpu = use_gpu
+        self.number_angles = 3
+        self.input_to_angles = nn.Linear(embedding_size, self.number_angles)
+
+
+    def _get_network_emissions(self, original_aa_string):
+        embedded_input = self.embed(original_aa_string)
+        emissions_padded = self.input_to_angles(embedded_input)
+
+        emissions = emissions_padded.transpose(0, 1)  # minibatch_size, self.mixture_size, -1
+
+        probabilities = torch.softmax(emissions, 2) # p
+
+        output_angles = torch.matmul(probabilities, ANGLE_ARR).transpose(0, 1)
+        
+        batch_sizes = list([a.size() for a in original_aa_string])
+
+        return output_angles, [], batch_sizes# Escribe tu modelo. Puedes sobre escribir esta plantilla (Python 3.8)
+class MasteAlgo(openprotein.BaseModel):
+    def __init__(self, embedding_size, use_gpu=False):
+        super(MasteAlgo, self).__init__(use_gpu, embedding_size)
+        self.use_gpu = use_gpu
+        self.number_angles = 3
+        self.input_to_angles = nn.Linear(embedding_size, self.number_angles)
+
+
+    def _get_network_emissions(self, original_aa_string):
+        embedded_input = self.embed(original_aa_string)
+        emissions_padded = self.input_to_angles(embedded_input)
+
+        emissions = emissions_padded.transpose(0, 1)  # minibatch_size, self.mixture_size, -1
+
+        probabilities = torch.softmax(emissions, 2) # p
+
+        output_angles = torch.matmul(probabilities, ANGLE_ARR).transpose(0, 1)
+        
+        batch_sizes = list([a.size() for a in original_aa_string])
+
+        return output_angles, [], batch_sizes# Escribe tu modelo. Puedes sobre escribir esta plantilla (Python 3.8)
+class MisalChicha(openprotein.BaseModel):
+    def __init__(self, embedding_size, use_gpu=False):
+        super(MisalChicha, self).__init__(use_gpu, embedding_size)
+        self.use_gpu = use_gpu
+        self.number_angles = 3
+        self.input_to_angles = nn.Linear(embedding_size, self.number_angles)
+
+
+    def _get_network_emissions(self, original_aa_string):
+        embedded_input = self.embed(original_aa_string)
+        emissions_padded = self.input_to_angles(embedded_input)
+
+        emissions = emissions_padded.transpose(0, 1)  # minibatch_size, self.mixture_size, -1
+
+        probabilities = torch.softmax(emissions, 2) # p
+
+        output_angles = torch.matmul(probabilities, ANGLE_ARR).transpose(0, 1)
+        
+        batch_sizes = list([a.size() for a in original_aa_string])
+
+        return output_angles, [], batch_sizes# Escribe tu modelo. Puedes sobre escribir esta plantilla (Python 3.8)
+class Mij(openprotein.BaseModel):
+    def __init__(self, embedding_size, use_gpu=False):
+        super(Mij, self).__init__(use_gpu, embedding_size)
+        self.use_gpu = use_gpu
+        self.number_angles = 3
+        self.input_to_angles = nn.Linear(embedding_size, self.number_angles)
+
+
+    def _get_network_emissions(self, original_aa_string):
+        embedded_input = self.embed(original_aa_string)
+        emissions_padded = self.input_to_angles(embedded_input)
+
+        emissions = emissions_padded.transpose(0, 1)  # minibatch_size, self.mixture_size, -1
+
+        probabilities = torch.softmax(emissions, 2) # p
+
+        output_angles = torch.matmul(probabilities, ANGLE_ARR).transpose(0, 1)
+        
+        batch_sizes = list([a.size() for a in original_aa_string])
+
+        return output_angles, [], batch_sizes# Escribe tu modelo. Puedes sobre escribir esta plantilla (Python 3.8)
+class MisaTest(openprotein.BaseModel):
+    def __init__(self, embedding_size, use_gpu=False):
+        super(MisaTest, self).__init__(use_gpu, embedding_size)
+        self.use_gpu = use_gpu
+        self.number_angles = 3
+        self.input_to_angles = nn.Linear(embedding_size, self.number_angles)
+
+
+    def _get_network_emissions(self, original_aa_string):
+        embedded_input = self.embed(original_aa_string)
+        emissions_padded = self.input_to_angles(embedded_input)
+
+        emissions = emissions_padded.transpose(0, 1)  # minibatch_size, self.mixture_size, -1
+
+        probabilities = torch.softmax(emissions, 2) # p
+
+        output_angles = torch.matmul(probabilities, ANGLE_ARR).transpose(0, 1)
+        
+        batch_sizes = list([a.size() for a in original_aa_string])
+
         return output_angles, [], batch_sizes

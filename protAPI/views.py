@@ -150,7 +150,8 @@ class GenerateModel(views.APIView):
             print("Model OK")
             import os
             cmd_to_file = "python manage.py runscript write_model --script-args " + model_structure.name
-            cmd_to_train = "python manage.py runscript train_model --script-args " + model_structure.name + " " + "1 " + "11" + " test"
+            cmd_to_train = "python manage.py runscript train_model --script-args " + model_structure.name + " " + \
+                            str(model_structure.epochs) + " " + str(request.user.pk) + " &"
             print(cmd_to_file)
             print(cmd_to_train)
             os.system(cmd_to_file)

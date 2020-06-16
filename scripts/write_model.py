@@ -21,7 +21,7 @@ def run(*args):
     #
     model_name = args[0]
     model_from_db = ModelStructure.objects.get(name=model_name)
-    file_path = settings.BASE_DIR + "/protApi/proteinnet/custom_models.py"
+    file_path = settings.BASE_DIR + "/protAPI/proteinnet/custom_models.py"
     f = open(file_path, "a")
     f.write(model_from_db.code)
     f.close()
