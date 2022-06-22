@@ -19,7 +19,7 @@ itypes==1.1.0
 Jinja2==2.11.1
 jmespath==0.10.0
 MarkupSafe==1.1.1
-numpy==1.18.1
+numpy==1.22.0
 packaging==20.3
 PeptideBuilder==1.0.4
 pyparsing==2.4.6
